@@ -1,5 +1,7 @@
 const path = require('path');
 const hbs = require('hbs');
+const geoLocation = require('./utils/geolocation');
+const forecast = require('./utils/forecast');
 const express = require('express');
 
 const app = express();
@@ -17,6 +19,7 @@ hbs.registerPartials(partialsPath);
 // Setup static dir to serve
 app.use(express.static(publicDirectoryPath));
 
+// routes
 app.get('', (req, res) => {
   res.render('index', { title: 'Weather', name: 'Helton' });
 });
@@ -30,10 +33,24 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
-  res.send({
-    forecast: 'Raining',
-    location: 'Recife',
-    temperature: 25.5,
+  if (!req.query.address) {
+    return res.send({ error: 'You must provide an address!' });
+  }
+
+  geoLocation(req.query.address, (error, data) => {
+    if (error) {
+      return res.send(error);
+    }
+    forecast(data.latitude, data.longitude, (error, dataForecast) => {
+      if (error) {
+        return res.send(error);
+      }
+      res.send({
+        forecast: dataForecast,
+        location: data.location,
+        address: req.query.address,
+      });
+    });
   });
 });
 
