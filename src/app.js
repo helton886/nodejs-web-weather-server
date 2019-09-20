@@ -5,6 +5,7 @@ const forecast = require('./utils/forecast');
 const express = require('express');
 
 const app = express();
+const port = process.env.PORT || 3000
 
 // Define path for express config
 const publicDirectoryPath = path.join(__dirname, '../public');
@@ -25,11 +26,19 @@ app.get('', (req, res) => {
 });
 
 app.get('/help', (req, res) => {
-  res.render('help', { title: 'Help', name: 'Helton', helpText: 'Help Text.' });
+  res.render('help', {
+    title: 'Help',
+    name: 'Helton',
+    helpText: 'Sending helptext through hbs.',
+  });
 });
 
 app.get('/about', (req, res) => {
-  res.render('about', { title: 'About', name: 'Helton' });
+  res.render('about', {
+    title: 'About',
+    name: 'Helton',
+    message: 'Made this app to improve knowledge!',
+  });
 });
 
 app.get('/weather', (req, res) => {
@@ -70,6 +79,6 @@ app.get('*', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('Server Running!');
+app.listen(port, () => {
+  console.log('Server Running on '+port);
 });
