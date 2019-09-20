@@ -37,6 +37,21 @@ app.get('/weather', (req, res) => {
   });
 });
 
+app.get('/help/*', (req, res) => {
+  res.render('404-help', {
+    title: '404',
+    name: 'Helton',
+    helpText: 'Help page not found.',
+  });
+});
+
+app.get('*', (req, res) => {
+  res.render('404', {
+    title: 'Page not found.',
+    name: 'Helton',
+  });
+});
+
 app.listen(3000, () => {
   console.log('Server Running!');
 });
