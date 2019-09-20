@@ -36,10 +36,8 @@ app.get('/weather', (req, res) => {
   if (!req.query.address) {
     return res.send({ error: 'You must provide an address!' });
   }
-
-  geoLocation(
-    req.query.address,
-    (error, { latitude, longitude, location } = {}) => {
+  // prettier-ignore
+  geoLocation(req.query.address, (error, { latitude, longitude, location } = {}) => {
       if (error) {
         return res.send(error);
       }
